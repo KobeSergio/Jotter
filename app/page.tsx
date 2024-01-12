@@ -3,8 +3,8 @@
 import { redirect } from "next/navigation";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
-import { Navbar } from "@/components/Navbar";
 import Content from "@/components/main/Content";
+import NavDesktop from "@/components/NavDesktop";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -13,9 +13,9 @@ export default async function Home() {
   }
 
   return (
-    <>
-      <Navbar session={session} />
+    <div className="flex">
+      <NavDesktop session={session} />
       <Content />
-    </>
+    </div>
   );
 }
