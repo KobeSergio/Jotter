@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Sidebar from "./Sidebar";
+import Sidebar from "./NavDesktop";
 import { signOut } from "next-auth/react";
 
 export function Navbar({ session }: { session: any }) {
@@ -50,7 +50,7 @@ export function Navbar({ session }: { session: any }) {
         </motion.p>
       </motion.div>
       {/* Show hamburger icon/sidebar component when on mobile to tablet screen size */}
-      <Sidebar />
+      {/* <Sidebar /> */}
     </nav>
   );
 }
