@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import React from "react";
 import { PageSpinner } from "@/components/Spinner";
 import Dropzone from "./Dropzone";
 import Recorder from "./Recorder";
+import { FaMicrophone, FaCloudUploadAlt } from "react-icons/fa";
 
 export default function Content() {
   const [files, setFiles] = useState([]);
@@ -22,25 +22,38 @@ export default function Content() {
     );
 
   return (
-    <main className="flex flex-col w-full h-full px-6 py-8 gap-6">
-      <div className="w-full bg-gray-300/20 h-1/6 flex p-6 gap-3">
+    <main className="flex flex-col w-full h-screen px-6 py-8 gap-4">
+      <h2 className="text-[#242424] text-lg font-bold select-none">
+        Upload or record an audio
+      </h2>
+      <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
         <div
-          className="w-1/2 h-full bg-white flex items-center justify-center hover:bg-gray-400/20"
+          className={`w-full sm:w-1/2 h-full bg-white p-3 sm:p-8 cursor-pointer select-none flex flex-col items-center justify-center rounded-lg ${
+            uploadType === "upload"
+              ? "border-2 border-[#005FD7] text-[#005FD7]"
+              : "text-[#C4C4C4] hover:text-[#555555]"
+          }`}
           onClick={() => {
             setUploadType("upload");
             setFiles([]);
           }}
         >
-          Upload an audio
+          <FaCloudUploadAlt size={30} />
+          <p className="font-semibold text-base sm:text-lg text-center">Upload an audio</p>
         </div>
         <div
-          className="w-1/2 h-full bg-white flex items-center justify-center hover:bg-gray-400/20"
+          className={`w-full sm:w-1/2 h-full bg-white p-3 sm:p-8 cursor-pointer select-none flex flex-col items-center justify-center rounded-lg ${
+            uploadType === "record"
+              ? "border-2 border-[#005FD7] text-[#005FD7]"
+              : "text-[#C4C4C4] hover:text-[#555555]"
+          }`}
           onClick={() => {
             setUploadType("record");
             setFiles([]);
           }}
         >
-          Record an audio
+          <FaMicrophone size={30} />
+          <p className="font-semibold text-base sm:text-lg text-center">Record an audio</p>
         </div>
       </div>
       {uploadType === "upload" ? (
@@ -48,14 +61,15 @@ export default function Content() {
       ) : (
         <Recorder setFiles={setFiles} files={files} />
       )}
-
+<div className="w-full h-24 flex justify-end">
       {(files as any).length != 0 && (
-        <div className="w-full flex justify-end mt-4">
-          <div className="w-1/4 p-4 bg-green-800 text-white flex items-center justify-center rounded-sm">
+        
+            <div className="w-fit px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none">
             Proceed
           </div>
-        </div>
+        
       )}
+      </div>
     </main>
   );
 }
