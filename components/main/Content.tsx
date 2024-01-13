@@ -64,7 +64,7 @@ export default function Content() {
 <div className="w-full h-24 flex justify-end">
       {(files as any).length != 0 && (
         
-            <div className="w-fit px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none">
+            <div className="w-fit h-fit px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none">
             Proceed
           </div>
         
