@@ -5,6 +5,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 import Content from "@/components/main/Content";
 import NavDesktop from "@/components/NavDesktop";
+import NavMobile from "@/components/NavMobile";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -15,6 +16,7 @@ export default async function Home() {
   return (
     <div className="flex">
       <NavDesktop session={session} />
+      <NavMobile session={session} />
       <Content />
     </div>
   );

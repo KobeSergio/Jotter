@@ -43,7 +43,7 @@ export default function Recorder({
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-full lg:h-[430px] flex items-center justify-center">
       <div className="flex flex-col gap-4 items-center justify-center">
         <button
           type="button"
@@ -53,25 +53,10 @@ export default function Recorder({
         >
           <div
             className={`w-9 h-9 transition-all duration-300 ease-in-out bg-red-600 ${
-              isRecording
-                ? "rounded-md transform scale-50"
-                : "rounded-full"
+              isRecording ? "rounded-md transform scale-50" : "rounded-full"
             }`}
           ></div>
         </button>
-
-        {/* <button
-          className={`rounded-full h-52 w-52 bg-gray-200/20 ${
-            isRecording ? "bg-red-500" : ""
-          }`}
-          onClick={isRecording ? stopRecording : startRecording}
-        >
-          {isRecording
-            ? "Stop Recording"
-            : files.length == 0
-            ? "Start Recording"
-            : "Start new Recording"}
-        </button> */}
         {files.length > 0 && (
           <audio ref={audioRef} controls>
             <source src={URL.createObjectURL(files[0])} type="audio/mp3" />

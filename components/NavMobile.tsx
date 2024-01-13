@@ -5,33 +5,24 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { MdLogout } from "react-icons/md";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { PiWaveformBold } from "react-icons/pi";
+import { AnimatePresence, motion } from "framer-motion";
 
-export default function NavDesktop({ session }: { session: any }) {
-  const [isCollapsed, setIsCollaped] = useState(false);
+export default function NavMobile({ session }: { session: any }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
-      className={`hidden lg:flex relative ${
-        isCollapsed ? "w-16" : "w-1/3"
-      } h-screen bg-[#171F27] flex-col gap-4 py-8 transition-all duration-500 ease-in-out`}
+      className={`${
+        isOpen ? "fixed inset-0" : "w-16"
+      } z-10 py-8 flex flex-col lg:hidden bg-[#171F27] h-screen transition-all duration-500 ease-in-out`}
     >
-      {/* Toggle button */}
-      <div
-        className="absolute flex text-center top-12 -right-3 p-1 text-white rounded-full bg-[#171F27] cursor-pointer"
-        onClick={() => {
-          setIsCollaped(!isCollapsed);
-        }}
-      >
-        {isCollapsed ? (
-          <IoChevronForward size={18} />
-        ) : (
-          <IoChevronBack size={18} />
-        )}
-      </div>
-      {!isCollapsed ? (
+      {isOpen ? (
         <>
+          <Hamburger
+            toggle={() => setIsOpen((prev) => !prev)}
+            isOpen={isOpen}
+          />
           <Link href={"/"} className="flex justify-center items-center gap-2">
             <Image
               src="../next.svg"
@@ -40,15 +31,12 @@ export default function NavDesktop({ session }: { session: any }) {
               alt={"logo"}
               color="white"
             />
-            <h2 className="text-white text-xl font-semibold cursor-pointer select-none">
-              Jotter
-            </h2>
           </Link>
           <div className="px-6 py-4 space-y-2">
             <h2 className="text-white text-lg font-bold text-center select-none">
               All Recordings
             </h2>
-            <div className="w-full px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-center text-white rounded-lg cursor-pointer select-none">
+            <div className="w-full px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none">
               + Add a new recording
             </div>
           </div>
@@ -118,26 +106,79 @@ export default function NavDesktop({ session }: { session: any }) {
                 <p className="text-white text-xs font-medium">00:51</p>
               </div>
             </div>
-          </div>
-          <div
-            className="w-fit flex items-center gap-2 text-red-500 hover:text-red-600 text-lg font-semibold cursor-pointer px-6 select-none"
-            onClick={() => signOut()}
-          >
-            <MdLogout size={16} />
-            Logout
-          </div>
+            </div>
+            <div
+              className="w-fit flex items-center gap-2 text-red-500 hover:text-red-600 text-lg font-semibold cursor-pointer px-6 select-none"
+              onClick={() => signOut()}
+            >
+              <MdLogout size={16} />
+              Logout
+            </div>
+          
         </>
       ) : (
-        <Link href={"/"} className="flex justify-center items-center gap-2">
-          <Image
-            src="../next.svg"
-            width={50}
-            height={50}
-            alt={"logo"}
-            color="white"
+        <>
+          <Hamburger
+            toggle={() => setIsOpen((prev) => !prev)}
+            isOpen={isOpen}
           />
-        </Link>
+          <Link href={"/"} className="flex justify-center items-center gap-2">
+            <Image
+              src="../next.svg"
+              width={50}
+              height={50}
+              alt={"logo"}
+              color="white"
+            />
+          </Link>
+        </>
       )}
     </div>
+  );
+}
+
+const Path = (props: any) => (
+  <motion.path
+    fill="white"
+    strokeWidth="3"
+    stroke="white"
+    strokeLinecap="round"
+    {...props}
+  />
+);
+
+function Hamburger({ toggle, isOpen }: any) {
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      className="z-40 cursor-pointer bg-transparent w-full px-6"
+    >
+      <svg width="23" height="23" viewBox="0 0 23 23">
+        <Path
+          variants={{
+            closed: { d: "M 2 2.5 L 20 2.5" },
+            open: { d: "M 3 16.5 L 17 2.5" },
+          }}
+          animate={isOpen ? "open" : "closed"}
+        />
+        <Path
+          d="M 2 9.423 L 20 9.423"
+          variants={{
+            closed: { opacity: 1 },
+            open: { opacity: 0 },
+          }}
+          transition={{ duration: 0.1 }}
+          animate={isOpen ? "open" : "closed"}
+        />
+        <Path
+          variants={{
+            closed: { d: "M 2 16.346 L 20 16.346" },
+            open: { d: "M 3 2.5 L 17 16.346" },
+          }}
+          animate={isOpen ? "open" : "closed"}
+        />
+      </svg>
+    </button>
   );
 }
