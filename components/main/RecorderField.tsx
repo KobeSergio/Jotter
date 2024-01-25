@@ -21,8 +21,12 @@ export default function Recorder({
         mediaRecorder.start();
 
         mediaRecorder.ondataavailable = (e) => {
-          const newFile = [e.data];
-          setFiles(newFile);
+          // Convert the Blob to a File
+          const newFile = new File([e.data], "recorded_audio.webm", {
+            type: e.data.type,
+            lastModified: new Date().getTime(),
+          });
+          setFiles([newFile]);
         };
 
         setMediaRecorder(mediaRecorder);

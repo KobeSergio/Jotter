@@ -36,7 +36,7 @@ export default function Dropzone({
       {...getRootProps({
         className: "dropzone",
       })}
-      className="w-full h-full lg:h-[430px] flex flex-col justify-center items-center gap-2 px-14 py-16 border-2 border-dashed border-[#C4C4C4] rounded-lg cursor-pointer"
+      className="w-full h-full flex flex-col justify-center items-center gap-2 px-14 py-16 border-2 border-dashed border-[#C4C4C4] rounded-lg cursor-pointer"
     >
       <input {...getInputProps()} />
       <p className="select-none text-sm text-[#C4C4C4] text-semibold text-center">

@@ -3,6 +3,7 @@ import {
   getDownloadURL,
   getStorage,
   ref,
+  uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
@@ -21,12 +22,12 @@ import {
 } from "firebase/firestore";
 // Constants
 const CONFIG = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 export default class FirebaseClass {
@@ -38,19 +39,89 @@ export default class FirebaseClass {
   DATE_NOW = new Date().toLocaleString();
 
   // Collections
-//   projectsCollection = collection(this.db, "projects");
-//   contractsCollection = collection(this.db, "contracts");
-//   guildsCollection = collection(this.db, "guild_communities");
-//   coinsCollection = collection(this.db, "coins");
+  recordingsCollection = collection(this.db, "recordings");
 
-//   async getSlugs() {
-//     //Get all contract object in the database and return their id
-//     const slugs: string[] = [];
-//     const querySnapshot = await getDocs(this.contractsCollection);
-//     querySnapshot.forEach((doc) => {
-//       slugs.push(doc.id);
-//     });
-//     if (!slugs) return [];
-//     return slugs;
-//   }
+  async getRecording(client_email: string) {
+    //Get recordings objects from a specific user in the database and return a list of it
+    try {
+      const docRef = doc(this.db, "recordings", client_email);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return docSnap.data().recordings;
+      } else {
+        console.log("No such document!");
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async uploadRecording(
+    email: string,
+    file: File,
+    transcription: string,
+    chatResponse: string
+  ) {
+    return new Promise<any>((resolve, reject) => {
+      const fileRef = ref(
+        this.storage,
+        `recordings/${email.split("@")[0]}/${file.name.split(".")[0]}-${
+          file.name.split(".")[1]
+        }`
+      );
+
+      const uploadTask = uploadBytesResumable(fileRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Handle progress updates if needed
+        },
+        (error) => {
+          alert(`${error} - Failed to upload file.`);
+          reject(error);
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            const recording = {
+              name: file.name,
+              url: downloadURL,
+              date: this.DATE_NOW,
+              transcription: transcription,
+              chatResponse: chatResponse,
+            };
+            const docRef = doc(this.db, "recordings", email);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+              const recordings = docSnap.data().recordings;
+              recordings.push(recording);
+              await updateDoc(docRef, { recordings: recordings });
+              resolve(recordings);
+            } else {
+              await setDoc(docRef, { recordings: [recording] });
+              resolve([recording]);
+            }
+          } catch (error) {
+            console.error("Error writing document: ", error);
+            reject(error);
+          }
+        }
+      );
+    });
+  }
+
+  // async getRecordings() {
+  //   //Get recordings objects from a specific user in the database and return a list of it
+  //   const slugs: any[] = [];
+  //   const querySnapshot = await getDocs(this.recordingsCollection);
+  //   querySnapshot.forEach((recording) => {
+  //     slugs.push(recording);
+  //   });
+  //   if (!slugs) return [];
+  //   return slugs;
+  // }
 }

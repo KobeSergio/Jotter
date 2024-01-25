@@ -7,15 +7,19 @@ import Image from "next/image";
 import { MdLogout } from "react-icons/md";
 import { PiWaveformBold } from "react-icons/pi";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRecording } from "@/contexts/RecordingContext";
+import { Recording } from "@/types/Recording";
 
 export default function NavMobile({ session }: { session: any }) {
+  const { selectedRecording, setSelectedRecording, recordings } =
+    useRecording();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
       className={`${
         isOpen ? "fixed inset-0" : "w-16"
-      } z-10 py-8 flex flex-col lg:hidden bg-[#171F27] h-screen transition-all duration-500 ease-in-out`}
+      } z-10 py-8 flex flex-col lg:hidden bg-[#171F27] h-full transition-all duration-500 ease-in-out`}
     >
       {isOpen ? (
         <>
@@ -23,15 +27,6 @@ export default function NavMobile({ session }: { session: any }) {
             toggle={() => setIsOpen((prev) => !prev)}
             isOpen={isOpen}
           />
-          <Link href={"/"} className="flex justify-center items-center gap-2">
-            <Image
-              src="../next.svg"
-              width={50}
-              height={50}
-              alt={"logo"}
-              color="white"
-            />
-          </Link>
           <div className="px-6 py-4 space-y-2">
             <h2 className="text-white text-lg font-bold text-center select-none">
               All Recordings
@@ -40,81 +35,46 @@ export default function NavMobile({ session }: { session: any }) {
               + Add a new recording
             </div>
           </div>
-          <div className="h-[420px] flex flex-col overflow-y-auto">
-            <div className="flex flex-col items-center gap-2 p-4">
-              <PiWaveformBold size={42} color="white" />
-              <p className="text-white text-base font-medium text-center select-none">
-                No recordings yet. <br></br>{" "}
-                <span className="text-sm text-[#C4C4C4]">
-                  Add a new recording to get started.
-                </span>
-              </p>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
+          <div className="h-full flex flex-col overflow-y-auto">
+            {recordings.length !== 0 ? (
+              recordings?.map((recording: Recording, index: number) => (
+                <div
+                  key={index}
+                  className={`flex flex-col gap-1.5 px-6 py-5 select-none ${
+                    selectedRecording == index
+                      ? "bg-[#F6F6F6] text-[#171F27]"
+                      : "text-white hover:bg-[#28333E] cursor-pointer"
+                  }`}
+                  onClick={() => {
+                    setSelectedRecording(index);
+                  }}
+                >
+                  <p className="text-base font-medium">{recording.name}</p>
+                  <div className="flex justify-between">
+                    <p className="text-xs font-medium">{recording.date}</p>
+                    <p className="text-xs font-medium"></p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex flex-col items-center gap-2 p-4">
+                <PiWaveformBold size={42} color="white" />
+                <p className="text-white text-base font-medium text-center select-none">
+                  No recordings yet. <br></br>{" "}
+                  <span className="text-sm text-[#C4C4C4]">
+                    Add a new recording to get started.
+                  </span>
+                </p>
               </div>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1.5 px-6 py-5 hover:bg-[#28333E] cursor-pointer select-none">
-              <p className="text-white text-base font-medium">Recording 1</p>
-              <div className="flex justify-between">
-                <p className="text-white text-xs font-medium">Jan 12, 2024</p>
-                <p className="text-white text-xs font-medium">00:51</p>
-              </div>
-            </div>
-            </div>
-            <div
-              className="w-fit flex items-center gap-2 text-red-500 hover:text-red-600 text-lg font-semibold cursor-pointer px-6 select-none"
-              onClick={() => signOut()}
-            >
-              <MdLogout size={16} />
-              Logout
-            </div>
-          
+            )}
+          </div>
+          <div
+            className="w-fit flex items-center gap-2 text-red-500 hover:text-red-600 text-lg font-semibold cursor-pointer px-6 select-none"
+            onClick={() => signOut()}
+          >
+            <MdLogout size={16} />
+            Logout
+          </div>
         </>
       ) : (
         <>
@@ -122,15 +82,6 @@ export default function NavMobile({ session }: { session: any }) {
             toggle={() => setIsOpen((prev) => !prev)}
             isOpen={isOpen}
           />
-          <Link href={"/"} className="flex justify-center items-center gap-2">
-            <Image
-              src="../next.svg"
-              width={50}
-              height={50}
-              alt={"logo"}
-              color="white"
-            />
-          </Link>
         </>
       )}
     </div>
