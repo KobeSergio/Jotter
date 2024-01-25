@@ -70,8 +70,8 @@ function formatPrompt(summary: string) {
   const notesDelimiter = "Notes:";
   const deliverablesDelimiter = "Deliverables:";
 
-  // Regular expression to split on dash followed by space
-  const splitRegex = /-\s+/;
+  // Regular expression to split on dash or asterisk followed by space
+  const splitRegex = /(-|\*)\s+/;
 
   const [notesSection, deliverablesSection] = summary.split(
     deliverablesDelimiter
@@ -81,11 +81,14 @@ function formatPrompt(summary: string) {
     .replace(notesDelimiter, "")
     .trim()
     .split(splitRegex)
-    .filter((note) => note.trim() !== "");
+    .filter((note) => note.trim() !== "" && note !== "-" && note !== "*");
   const deliverables = deliverablesSection
     .trim()
     .split(splitRegex)
-    .filter((deliverable) => deliverable.trim() !== "");
+    .filter(
+      (deliverable) =>
+        deliverable.trim() !== "" && deliverable !== "-" && deliverable !== "*"
+    );
 
   return (
     <div>

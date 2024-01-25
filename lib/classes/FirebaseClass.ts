@@ -20,6 +20,7 @@ import {
   addDoc,
   updateDoc,
 } from "firebase/firestore";
+import { Recording } from "@/types/Recording";
 // Constants
 const CONFIG = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -64,7 +65,7 @@ export default class FirebaseClass {
     transcription: string,
     chatResponse: string
   ) {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<Recording[]>((resolve, reject) => {
       const fileRef = ref(
         this.storage,
         `recordings/${email.split("@")[0]}/${file.name.split(".")[0]}-${
@@ -97,13 +98,15 @@ export default class FirebaseClass {
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
-              const recordings = docSnap.data().recordings;
+              const recordings: Recording[] = docSnap.data().recordings;
               recordings.push(recording);
               await updateDoc(docRef, { recordings: recordings });
+              console.log(recordings);
               resolve(recordings);
             } else {
               await setDoc(docRef, { recordings: [recording] });
-              resolve([recording]);
+              console.log([recording] as Recording[]);
+              resolve([recording] as Recording[]);
             }
           } catch (error) {
             console.error("Error writing document: ", error);

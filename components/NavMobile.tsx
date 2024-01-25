@@ -36,7 +36,7 @@ export default function NavMobile({ session }: { session: any }) {
             </div>
           </div>
           <div className="h-full flex flex-col overflow-y-auto">
-            {recordings.length !== 0 ? (
+            {recordings?.length !== 0 && recordings ? (
               recordings?.map((recording: Recording, index: number) => (
                 <div
                   key={index}
@@ -57,7 +57,7 @@ export default function NavMobile({ session }: { session: any }) {
                 </div>
               ))
             ) : (
-              <div className="flex flex-col items-center gap-2 p-4">
+              <div className="h-full flex flex-col justify-center items-center gap-2 p-4">
                 <PiWaveformBold size={42} color="white" />
                 <p className="text-white text-base font-medium text-center select-none">
                   No recordings yet. <br></br>{" "}

@@ -17,7 +17,7 @@ export default function NewRecording({
   session: Session;
   firebase: FirebaseClass;
 }) {
-  const { setRecordings, recordings, setSelectedRecording } = useRecording();
+  const { setRecordings, setSelectedRecording } = useRecording();
 
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -27,49 +27,12 @@ export default function NewRecording({
     if (!file) return;
     setIsLoading(true);
 
-    //===========================Step 1: Increase the volume of the audio===========================
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
     reader.onload = async () => {
       if (!session.user?.email) return;
 
-      // const audioContext = new AudioContext();
-      // const audioBuffer = await audioContext.decodeAudioData(
-      //   reader.result as any
-      // );
-
-      // const volumeFactor = 10; // Increase volume
-      // const channelData = audioBuffer.getChannelData(0); // For simplicity, handling one channel
-
-      // // Increase the volume
-      // for (let i = 0; i < channelData.length; i++) {
-      //   channelData[i] *= volumeFactor;
-      // }
-
-      // const wavBlob = float32ArrayToWav(channelData, audioBuffer.sampleRate);
-      // const modifiedFile = new File([wavBlob], file.name, {
-      //   type: "audio/wav",
-      // });
-
-      // // Split the audioBuffer into smaller segments
-      // const segments = splitAudioBuffer(audioBuffer, 420); // Implement this function
-      // const segmentFiles = segments.map((segment, index) => {
-      //   const segmentBlob = float32ArrayToWav(segment, audioBuffer.sampleRate);
-      //   return new File([segmentBlob], `${file.name}_part_${index}.wav`, {
-      //     type: "audio/wav",
-      //   });
-      // });
-
-      // // Transcribe all segments concurrently
-      // const transcriptionPromises = segmentFiles.map((segmentFile) =>
-      //   transcribeSegment(segmentFile)
-      // );
-      // const transcriptions = await Promise.all(transcriptionPromises);
-
-      // // Concatenate all transcriptions into one string
-      // const fullTranscription = transcriptions.join(" ");
-
-      //===========================Step 2: Send the audio FILE to the transcription API===========================
+      //===========================Step 1: Send the audio FILE to the transcription API===========================
       let formData = new FormData();
       formData.append("audioFile", file);
 
@@ -83,7 +46,7 @@ export default function NewRecording({
       const { transcription } = await response?.json(); // <== output
       console.log(transcription);
 
-      //===========================Step 3: Send the transcription to chatgpt===========================
+      //===========================Step 2: Send the transcription to chatgpt===========================
       formData = new FormData();
       formData.append("transcript", transcription);
 
@@ -97,7 +60,7 @@ export default function NewRecording({
       const { summary } = await chatResponse?.json(); // <== output
       console.log(summary);
 
-      //===========================Step 4: Upload the recording to firebase===========================
+      //===========================Step 3: Upload the recording to firebase===========================
       const recordings: Recording[] = await firebase.uploadRecording(
         session.user?.email,
         file,
@@ -105,8 +68,17 @@ export default function NewRecording({
         summary
       );
 
-      setRecordings(recordings);
-      setSelectedRecording(recordings.length - 1);
+      console.log(recordings);
+
+      //Try catched because it will throw an error if the user has no recordings
+      try {
+        if (recordings?.length != 0) {
+          setRecordings(recordings);
+          setSelectedRecording(recordings?.length - 1);
+        }
+      } catch (error) {
+        console.log(error);
+      }
 
       setIsLoading(false);
     };
@@ -132,7 +104,7 @@ export default function NewRecording({
         <div
           className={`w-full sm:w-1/2 h-full bg-white p-3 sm:p-8 cursor-pointer select-none flex flex-col items-center justify-center rounded-lg ${
             uploadType === "upload"
-              ? "border-2 border-[#005FD7] text-[#005FD7]"
+              ? "border-2 border-[#171F27] text-[#171F27]"
               : "text-[#C4C4C4] hover:text-[#555555]"
           }`}
           onClick={() => {
@@ -148,7 +120,7 @@ export default function NewRecording({
         <div
           className={`w-full sm:w-1/2 h-full bg-white p-3 sm:p-8 cursor-pointer select-none flex flex-col items-center justify-center rounded-lg ${
             uploadType === "record"
-              ? "border-2 border-[#005FD7] text-[#005FD7]"
+              ? "border-2 border-[#171F27] text-[#171F27]"
               : "text-[#C4C4C4] hover:text-[#555555]"
           }`}
           onClick={() => {
@@ -173,7 +145,7 @@ export default function NewRecording({
             onClick={() => {
               uploadFiles();
             }}
-            className="w-fit h-fit px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none"
+            className="w-fit h-fit px-6 py-3 flex items-center justify-center bg-[#171F27] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none"
           >
             Proceed
           </div>

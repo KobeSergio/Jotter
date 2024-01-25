@@ -39,15 +39,14 @@ export default function NavDesktop({ session }: { session: any }) {
       </div>
       {!isCollapsed ? (
         <>
-          <Link href={"/"} className="flex justify-center items-center gap-2">
-            {/* <Image
-              src="../next.svg"
-              width={50}
-              height={50}
+          <Link href={"/"} className="flex justify-center items-center">
+            <Image
+              src="./Jotter-removebg-preview.svg"
+              width={100}
+              height={100}
               alt={"logo"}
-              color="white"
-            /> */}
-            <h2 className="text-white text-xl font-semibold cursor-pointer select-none">
+            />
+            <h2 className="text-white text-xl font-semibold cursor-pointer select-none -ml-4">
               Jotter
             </h2>
           </Link>
@@ -65,7 +64,7 @@ export default function NavDesktop({ session }: { session: any }) {
             </div>
           </div>
           <div className="h-full flex flex-col overflow-y-auto">
-            {recordings.length !== 0 ? (
+            {recordings?.length !== 0 && recordings ? (
               recordings?.map((recording: Recording, index: number) => (
                 <div
                   key={index}
@@ -86,7 +85,7 @@ export default function NavDesktop({ session }: { session: any }) {
                 </div>
               ))
             ) : (
-              <div className="flex flex-col items-center gap-2 p-4">
+              <div className="h-full flex flex-col justify-center items-center gap-2 p-4">
                 <PiWaveformBold size={42} color="white" />
                 <p className="text-white text-base font-medium text-center select-none">
                   No recordings yet. <br></br>{" "}
@@ -107,7 +106,12 @@ export default function NavDesktop({ session }: { session: any }) {
         </>
       ) : (
         <p className="flex justify-center items-center gap-2 font-bold text-white">
-          Jotter
+          <Image
+            src="./Jotter-removebg-preview.svg"
+            width={145}
+            height={145}
+            alt={"logo"}
+          />
         </p>
       )}
     </div>
