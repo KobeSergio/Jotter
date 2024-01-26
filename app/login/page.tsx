@@ -32,9 +32,9 @@ export default function Login() {
       </h2>
       <button
         type="button"
-        onClick={() => {
+        onClick={async () => {
           setIsLoading(true);
-          signIn("google").then(() => {
+          await signIn("google").then(() => {
             router.push("/");
             setIsLoading(false);
           });
