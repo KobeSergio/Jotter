@@ -35,7 +35,6 @@ export default function Login() {
         onClick={async () => {
           setIsLoading(true);
           await signIn("google").then(() => {
-            router.push("/");
             setIsLoading(false);
           });
         }}
