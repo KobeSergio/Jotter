@@ -22,6 +22,9 @@ export default function NewRecording({
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [uploadType, setUploadType] = useState<"upload" | "record">("upload");
+
+  const [progressBar, setProgressBar] = useState(0);
+
   const uploadFiles = async () => {
     const file = files[0];
     if (!file) return;
@@ -33,8 +36,19 @@ export default function NewRecording({
       if (!session.user?.email) return;
 
       //===========================Step 1: Send the audio FILE to the transcription API===========================
+
+      //Upload the file to firebase
+      const downloadURL = await firebase.uploadRecording(
+        session.user?.email,
+        file
+      );
+
+      setProgressBar(1);
+
       let formData = new FormData();
-      formData.append("audioFile", file);
+      formData.append("audioFileURL", downloadURL);
+      formData.append("audioFileName", file.name);
+      formData.append("audioFileType", file.type);
 
       const response = await fetch("/api/openai/", {
         method: "POST",
@@ -45,7 +59,7 @@ export default function NewRecording({
 
       const { transcription } = await response?.json(); // <== output
       console.log(transcription);
-
+      setProgressBar(2);
       //===========================Step 2: Send the transcription to chatgpt===========================
       formData = new FormData();
       formData.append("transcript", transcription);
@@ -60,14 +74,16 @@ export default function NewRecording({
       const { summary } = await chatResponse?.json(); // <== output
       console.log(summary);
 
+      setProgressBar(3);
       //===========================Step 3: Upload the recording to firebase===========================
-      const recordings: Recording[] = await firebase.uploadRecording(
+      const recordings: Recording[] = await firebase.updateRecording(
         session.user?.email,
-        file,
+        file.name,
+        downloadURL,
         transcription,
         summary
       );
-
+      setProgressBar(4);
       console.log(recordings);
 
       //Try catched because it will throw an error if the user has no recordings
@@ -92,6 +108,19 @@ export default function NewRecording({
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <PageSpinner />
+
+        <p className="mt-4 text-sm text-gray-600/80 font-semibold">
+          {" "}
+          {progressBar == 1
+            ? "Uploading audio..."
+            : progressBar == 2
+            ? "Transcribing audio..."
+            : progressBar == 3
+            ? "Summarizing audio..."
+            : progressBar == 4
+            ? "Generating page..."
+            : ""}
+        </p>
       </div>
     );
 

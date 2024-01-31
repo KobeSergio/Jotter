@@ -59,13 +59,8 @@ export default class FirebaseClass {
     }
   }
 
-  async uploadRecording(
-    email: string,
-    file: File,
-    transcription: string,
-    chatResponse: string
-  ) {
-    return new Promise<Recording[]>((resolve, reject) => {
+  async uploadRecording(email: string, file: File) {
+    return new Promise<string>((resolve, reject) => {
       const fileRef = ref(
         this.storage,
         `recordings/${email.split("@")[0]}/${file.name.split(".")[0]}-${
@@ -87,27 +82,7 @@ export default class FirebaseClass {
         async () => {
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            const recording = {
-              name: file.name,
-              url: downloadURL,
-              date: this.DATE_NOW,
-              transcription: transcription,
-              chatResponse: chatResponse,
-            };
-            const docRef = doc(this.db, "recordings", email);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-              const recordings: Recording[] = docSnap.data().recordings;
-              recordings.push(recording);
-              await updateDoc(docRef, { recordings: recordings });
-              console.log(recordings);
-              resolve(recordings);
-            } else {
-              await setDoc(docRef, { recordings: [recording] });
-              console.log([recording] as Recording[]);
-              resolve([recording] as Recording[]);
-            }
+            resolve(downloadURL);
           } catch (error) {
             console.error("Error writing document: ", error);
             reject(error);
@@ -117,6 +92,42 @@ export default class FirebaseClass {
     });
   }
 
+  async updateRecording(
+    email: string,
+    filename: string,
+    downloadURL: string,
+    transcription: string,
+    chatResponse: string
+  ) {
+    return new Promise<Recording[]>(async (resolve, reject) => {
+      try {
+        const recording = {
+          name: filename,
+          url: downloadURL,
+          date: this.DATE_NOW,
+          transcription: transcription,
+          chatResponse: chatResponse,
+        };
+        const docRef = doc(this.db, "recordings", email);
+        const docSnap = await getDoc(docRef); 
+        if (docSnap.exists()) {
+          const recordings: Recording[] = docSnap.data().recordings;
+          recordings.push(recording);
+          await updateDoc(docRef, { recordings: recordings });
+          console.log(recordings);
+          resolve(recordings);
+        } else {
+          await setDoc(docRef, { recordings: [recording] });
+          console.log([recording] as Recording[]);
+          resolve([recording] as Recording[]);
+        }
+      } catch (error) {
+        console.error("Error writing document: ", error);
+        reject(error);
+      }
+    });
+  }
+  
   // async getRecordings() {
   //   //Get recordings objects from a specific user in the database and return a list of it
   //   const slugs: any[] = [];
