@@ -2,9 +2,6 @@ import { NextRequest } from "next/server";
 import OpenAI from "openai";
 
 export async function POST(request: NextRequest) {
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
   const formData = await request.formData();
   const audioFileURL = formData.get("audioFileURL"); // URL to the audio file
   const audioFileName = formData.get("audioFileName"); // Name of the audio file
@@ -22,6 +19,10 @@ export async function POST(request: NextRequest) {
   });
 
   console.log(audioFile);
+
+  const openai = new OpenAI({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  });
 
   const transcription = await openai.audio.transcriptions.create({
     file: audioFile,
