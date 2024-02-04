@@ -47,6 +47,7 @@ export default function NavMobile({ session }: { session: any }) {
                   }`}
                   onClick={() => {
                     setSelectedRecording(index);
+                    setIsOpen(false);
                   }}
                 >
                   <p className="text-base font-medium">{recording.name}</p>
