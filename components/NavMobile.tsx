@@ -19,7 +19,7 @@ export default function NavMobile({ session }: { session: any }) {
     <div
       className={`${
         isOpen ? "fixed inset-0" : "w-16"
-      } z-10 py-8 flex flex-col lg:hidden bg-[#171F27] h-full transition-all duration-500 ease-in-out`}
+      } z-10 py-8 flex flex-col lg:hidden bg-darkGreen h-full transition-all duration-500 ease-in-out`}
     >
       {isOpen ? (
         <>
@@ -31,7 +31,8 @@ export default function NavMobile({ session }: { session: any }) {
             <h2 className="text-white text-lg font-bold text-center select-none">
               All Recordings
             </h2>
-            <div className="w-full px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none">
+            <div className="w-full px-12 py-4 flex items-center justify-center bg-mainGreen hover:bg-opacity-95 text-base font-bold text-center text-darkGreen rounded-lg cursor-pointer select-none"
+            >
               + Add a new recording
             </div>
           </div>
@@ -42,8 +43,8 @@ export default function NavMobile({ session }: { session: any }) {
                   key={index}
                   className={`flex flex-col gap-1.5 px-6 py-5 select-none ${
                     selectedRecording == index
-                      ? "bg-[#F6F6F6] text-[#171F27]"
-                      : "text-white hover:bg-[#28333E] cursor-pointer"
+                      ? "bg-mainGreen/10 text-white"
+                      : "text-white hover:bg-mainGreen/10 cursor-pointer"
                   }`}
                   onClick={() => {
                     setSelectedRecording(index);

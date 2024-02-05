@@ -162,7 +162,7 @@ export default function NewRecording({
       <div className="w-full h-screen flex justify-center items-center">
         <PageSpinner />
 
-        <p className="mt-4 text-sm text-gray-600/80 font-semibold">
+        <p className="mt-4 text-sm text-darkGreen font-semibold">
           {" "}
           {progressBar == 1
             ? "Parsing audio..."
@@ -179,14 +179,14 @@ export default function NewRecording({
 
   return (
     <div className="flex flex-col w-full h-screen px-6 py-8 gap-4">
-      <h2 className="text-[#242424] text-lg font-bold select-none">
+      <h2 className="text-darkGreen text-lg font-bold select-none">
         Upload or record an audio
       </h2>
       <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
         <div
           className={`w-full sm:w-1/2 h-full bg-white p-3 sm:p-8 cursor-pointer select-none flex flex-col items-center justify-center rounded-lg ${
             uploadType === "upload"
-              ? "border-2 border-[#171F27] text-[#171F27]"
+              ? "border-2 border-darkGreen text-darkGreen"
               : "text-[#C4C4C4] hover:text-[#555555]"
           }`}
           onClick={() => {
@@ -195,14 +195,14 @@ export default function NewRecording({
           }}
         >
           <FaCloudUploadAlt size={30} />
-          <p className="font-semibold text-base sm:text-lg text-center">
+          <p className="font-bold text-base sm:text-lg text-center">
             Upload an audio
           </p>
         </div>
         <div
           className={`w-full sm:w-1/2 h-full bg-white p-3 sm:p-8 cursor-pointer select-none flex flex-col items-center justify-center rounded-lg ${
             uploadType === "record"
-              ? "border-2 border-[#171F27] text-[#171F27]"
+              ? "border-2 border-darkGreen text-darkGreen"
               : "text-[#C4C4C4] hover:text-[#555555]"
           }`}
           onClick={() => {
@@ -211,7 +211,7 @@ export default function NewRecording({
           }}
         >
           <FaMicrophone size={30} />
-          <p className="font-semibold text-base sm:text-lg text-center">
+          <p className="font-bold text-base sm:text-lg text-center">
             Record an audio
           </p>
         </div>

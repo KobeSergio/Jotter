@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import Providers from "@/contexts/Providers";
 import Head from "next/head";
 
-const roboto = Roboto({ subsets: ["latin"], weight: ["400", "700"] });
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900", "1000"],
+});
 
 export const metadata: Metadata = {
   title: "Jotter",
@@ -21,7 +24,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={nunito.className}>
         <Providers>{children}</Providers>
       </body>
     </html>
