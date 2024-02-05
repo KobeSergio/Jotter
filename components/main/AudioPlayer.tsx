@@ -5,12 +5,12 @@ import WaveSurfer from "wavesurfer.js";
 const formWaveSurferOptions = (ref: any) => ({
   container: ref,
   waveColor: "#eee",
-  progressColor: "#2e3c4b",
-  cursorColor: "#2e3c4b",
-  barWidth: 3,
-  barRadius: 3,
+  progressColor: "#213D39",
+  cursorColor: "#BCE955",
+  barWidth: 5,
+  barRadius: 5,
   responsive: true,
-  height: 150,
+  height: 100,
   // If true, normalize by the maximum peak instead of 1.0.
   normalize: true,
   // Use the PeakCache to improve rendering speed of large waveforms.
@@ -68,15 +68,16 @@ export default function Waveform({ url }: { url: any }) {
     wavesurfer.current.setVolume(newVolume || 1);
   };
 
+  // ⏸
   return (
-    <div className="w-full h-fit flex flex-col items-center justify-center">
+    <div className="w-full h-fit flex flex-col items-center justify-center mt-2">
       <div id="waveform" ref={waveformRef} className="w-full" />
-      <div className="controls flex items-center justify-center mt-4">
+      <div className="controls flex flex-wrap items-center justify-center mt-4 gap-4">
         <button
           onClick={handlePlayPause}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center justify-center mr-4"
+          className="w-12 bg-darkGreen hover:bg-opacity-95 text-white font-bold py-2 px-4 rounded inline-flex items-center justify-center"
         >
-          <span>{!playing ? "▶" : "⏸"}</span>
+          <span>{!playing ? "▶" : "II"}</span>
         </button>
         <div className="flex items-center">
           <input

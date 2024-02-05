@@ -27,7 +27,7 @@ export default function Login() {
         height={150}
         alt={"logo"}
       />
-      <h2 className="text-xl text-[#171F27] font-bold text-center -mt-10 select-none">
+      <h2 className="w-52 font-black text-3xl text-center text-darkGreen select-none cursor-pointer -mt-10">
         Jotter
       </h2>
       <button
@@ -38,9 +38,9 @@ export default function Login() {
             setIsLoading(false);
           });
         }}
-        className="lg:w-1/4 bg-[#171F27]/90 hover:bg-[#171F27] font-medium text-center text-base text-white py-3 px-5 rounded-lg mt-6 flex items-center justify-center select-none"
+        className="lg:w-1/4 h-fit border-darkGreen bg-darkGreen hover:border-opacity-95 hover:bg-opacity-95 font-bold text-center text-base text-white px-4 md:px-12 py-4 rounded-lg mt-6 flex items-center justify-center select-none"
       >
-        {isLoading ? <Spinner /> : "Sign in with Google"}
+        {isLoading ? <span className="flex items-center"><Spinner />Signing in with Google</span> : "Sign in with Google"}
       </button>
     </div>
   );

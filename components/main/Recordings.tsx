@@ -33,32 +33,29 @@ export default function Recordings({
 
   if (selectedRecording !== null) {
     return (
-      <div className="w-full h-screen overflow-scroll flex flex-col items-start justify-between p-4 gap-4">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-start flex-col gap-2 w-full">
-            <div className="font-semibold text-lg">{name}</div>
-            <div className="">{date}</div>
-          </div>
-          <div className="flex items-start flex-col gap-2 w-full">
-            <div className="font-semibold text-lg">Summary:</div>
-            <div className="">{formatPrompt(chatResponse)}</div>
+      <div className="w-full h-screen overflow-scroll flex flex-col items-start px-6 py-8">
+        <div className="flex flex-col gap-2 w-full border-b border-b-gray pb-4">
+          <div className="font-bold text-2xl">{name}</div>
+          <div className="font-medium text-sm">{date}</div>
+          <AudioPlayer url={url} />
+        </div>
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 w-full mt-4">
+          {formatPrompt(chatResponse)}
+          <div className="w-full lg:w-1/2 flex items-start flex-col gap-2">
+            <div className="font-bold uppercase text-sm text-darkGreen select-none">Transcript</div>
+            <div className="overflow-scroll text-darkGreen text-base font-semibold">
+              {showFullTranscript
+                ? transcription
+                : truncateTranscript(transcription)}
+              <button
+                onClick={toggleTranscript}
+                className="text-darkGreen hover:underline underline-offset-2 text-base font-semibold ml-1 select-none"
+              >
+                {showFullTranscript ? " See Less" : " See More"}
+              </button>
+            </div>
           </div>
         </div>
-        <div className="flex items-start flex-col gap-2 w-full">
-          <div className="font-semibold text-lg">Transcript:</div>
-          <div className="overflow-scroll">
-            {showFullTranscript
-              ? transcription
-              : truncateTranscript(transcription)}
-            <button
-              onClick={toggleTranscript}
-              className="text-[#2e3c4b]/80 hover:text-[#2e3c4b] ml-1"
-            >
-              {showFullTranscript ? " See Less" : " See More"}
-            </button>
-          </div>
-        </div>
-        <AudioPlayer url={url} />
       </div>
     );
   }
@@ -91,22 +88,28 @@ function formatPrompt(summary: string) {
     );
 
   return (
-    <div>
-      <div>
-        <h3 className="font-bold">Notes:</h3>
-        <ul className="list-disc pl-5">
-          {notes.map((note, index) => (
-            <li key={index}>{note.trim()}</li>
-          ))}
-        </ul>
+    <div className="w-full lg:w-1/2 flex flex-col gap-4">
+      <div className="space-y-2">
+        <h3 className="font-bold uppercase text-sm text-darkGreen select-none">Notes</h3>
+        <div className="p-4 rounded-lg bg-gray">
+          <ul className="list-disc pl-5 text-darkGreen font-semibold text-base">
+            {notes.map((note, index) => (
+              <li key={index}>{note.trim()}</li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <div className="mt-4">
-        <h3 className="font-bold">Deliverables:</h3>
-        <ul className="list-disc pl-5">
-          {deliverables.map((deliverable, index) => (
-            <li key={index}>{deliverable.trim()}</li>
-          ))}
-        </ul>
+      <div className="space-y-2">
+        <h3 className="font-bold uppercase text-sm text-darkGreen select-none">
+          Deliverables
+        </h3>
+        <div className="p-4 rounded-lg bg-gray">
+          <ul className="list-disc pl-5 text-darkGreen font-semibold text-base">
+            {deliverables.map((deliverable, index) => (
+              <li key={index}>{deliverable.trim()}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

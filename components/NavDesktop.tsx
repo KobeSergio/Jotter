@@ -22,11 +22,11 @@ export default function NavDesktop({ session }: { session: any }) {
     <div
       className={`hidden lg:flex relative ${
         isCollapsed ? "w-16" : "w-1/3"
-      } h-screen bg-[#171F27] flex-col gap-4 py-8 transition-all duration-500 ease-in-out`}
+      } h-screen bg-darkGreen flex-col gap-4 py-8 transition-all duration-500 ease-in-out`}
     >
       {/* Toggle button */}
       <div
-        className="absolute flex text-center top-12 -right-3 p-1 text-white rounded-full bg-[#171F27] cursor-pointer"
+        className="absolute flex text-center top-12 -right-3 p-1 text-white rounded-full bg-darkGreen cursor-pointer"
         onClick={() => {
           setIsCollaped(!isCollapsed);
         }}
@@ -46,7 +46,7 @@ export default function NavDesktop({ session }: { session: any }) {
               height={100}
               alt={"logo"}
             />
-            <h2 className="text-white text-xl font-semibold cursor-pointer select-none -ml-4">
+            <h2 className="text-white text-xl font-bold cursor-pointer select-none -ml-4">
               Jotter
             </h2>
           </Link>
@@ -58,7 +58,7 @@ export default function NavDesktop({ session }: { session: any }) {
               onClick={() => {
                 setSelectedRecording(null);
               }}
-              className="w-full px-6 py-3 flex items-center justify-center bg-[#005FD7] hover:bg-[#004BAA] text-base font-medium text-center text-white rounded-lg cursor-pointer select-none"
+              className="w-full px-12 py-4 flex items-center justify-center bg-mainGreen hover:bg-opacity-95 text-base font-bold text-center text-darkGreen rounded-lg cursor-pointer select-none"
             >
               + Add a new recording
             </div>
@@ -70,14 +70,14 @@ export default function NavDesktop({ session }: { session: any }) {
                   key={index}
                   className={`flex flex-col gap-1.5 px-6 py-5 select-none ${
                     selectedRecording == index
-                      ? "bg-[#F6F6F6] text-[#171F27]"
-                      : "text-white hover:bg-[#28333E] cursor-pointer"
+                      ? "bg-mainGreen/10 text-white"
+                      : "text-white hover:bg-mainGreen/10 cursor-pointer"
                   }`}
                   onClick={() => {
                     setSelectedRecording(index);
                   }}
                 >
-                  <p className="text-base font-medium">{recording.name}</p>
+                  <p className="text-base font-semibold">{recording.name}</p>
                   <div className="flex justify-between">
                     <p className="text-xs font-medium">{recording.date}</p>
                     <p className="text-xs font-medium"></p>
