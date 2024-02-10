@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-
+import {
+  RiForward10Fill,
+  RiReplay10Fill,
+  RiPlayFill,
+  RiPauseFill,
+} from "react-icons/ri";
+import { IoVolumeMedium } from "react-icons/io5";
 import WaveSurfer from "wavesurfer.js";
 
 const formWaveSurferOptions = (ref: any) => ({
@@ -68,32 +74,49 @@ export default function Waveform({ url }: { url: any }) {
     wavesurfer.current.setVolume(newVolume || 1);
   };
 
-  // ⏸
+  const handleFastForward = () => {
+    const currentTime = wavesurfer.current.getCurrentTime();
+    wavesurfer.current.seekTo(
+      (currentTime + 10) / wavesurfer.current.getDuration()
+    );
+  };
+
+  const handleRewind = () => {
+    const currentTime = wavesurfer.current.getCurrentTime();
+    wavesurfer.current.seekTo(
+      (currentTime - 10) / wavesurfer.current.getDuration()
+    );
+  };
+
   return (
     <div className="w-full h-fit flex flex-col items-center justify-center mt-2">
       <div id="waveform" ref={waveformRef} className="w-full" />
-      <div className="controls flex flex-wrap items-center justify-center mt-4 gap-4">
-        <button
-          onClick={handlePlayPause}
-          className="w-12 bg-darkGreen hover:bg-opacity-95 text-white font-bold py-2 px-4 rounded inline-flex items-center justify-center"
-        >
-          <span>{!playing ? "▶" : "II"}</span>
-        </button>
-        <div className="flex items-center">
+      <div className="controls flex flex-col md:flex-row max-md:gap-2 max-lg max-lg:justify-center items-center justify-between mt-4 w-full">
+        <div className="flex-grow flex justify-center gap-4 ml-3">
+          <button onClick={handleRewind} className="hover:scale-105">
+            <RiReplay10Fill size={27} />
+          </button>
+          <button onClick={handlePlayPause} className="hover:scale-105">
+            {!playing ? <RiPlayFill size={30} /> : <RiPauseFill size={30} />}
+          </button>
+          <button onClick={handleFastForward} className="hover:scale-105">
+            <RiForward10Fill size={27} />
+          </button>
+        </div>
+        <div className="flex items-center gap-1">
+          <IoVolumeMedium size={24} />
           <input
             type="range"
             id="volume"
             name="volume"
             min="0.01"
             max="1"
+            title="volume"
             step=".025"
             onChange={onVolumeChange}
             defaultValue={volume}
-            className="mr-2"
+            className="accent-darkGreen"
           />
-          <label htmlFor="volume" className="text-sm">
-            Volume
-          </label>
         </div>
       </div>
     </div>
