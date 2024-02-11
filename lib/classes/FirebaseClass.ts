@@ -155,7 +155,7 @@ export default class FirebaseClass
     {
         const document = doc(collection(this.db, 'calls'));
         const callDetails: TCallDetails = {
-            id: document.id,
+            call_id: document.id,
             caller_id: caller_id,
             receiver_id: receiver_id,
             receiver_number: receiver_number

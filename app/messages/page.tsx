@@ -22,7 +22,7 @@ export default function Messages()
                 <img src="/call.png" width={100} height={100} />
             </div>
             <input type="text" className="w-[500px] mt-10 py-2 px-5 border-slate-700 border-2" onChange={(e) => { setPhoneNumber(e.target.value) }} placeholder="Put the number you wanna call here" />
-            <p className="mt-5 font-bold text-2xl">I'm only one call away 🎵</p>
+            <p className="mt-5 font-bold text-2xl">I&apos;m only one call away 🎵</p>
         </div>
     );
 }
