@@ -40,7 +40,13 @@ export default function NavMobile({ session }: { session: any }) {
               <h2 className="text-white text-lg font-bold text-center select-none">
                 All Recordings
               </h2>
-              <div className="w-full px-12 py-4 flex items-center justify-center bg-mainGreen hover:bg-opacity-95 text-base font-bold text-center text-darkGreen rounded-lg cursor-pointer select-none">
+              <div
+                onClick={() => {
+                  setSelectedRecording(null);
+                  setIsOpen(false);
+                }}
+                className="w-full px-12 py-4 flex items-center justify-center bg-mainGreen hover:bg-opacity-95 text-base font-bold text-center text-darkGreen rounded-lg cursor-pointer select-none"
+              >
                 + Add a new recording
               </div>
             </div>

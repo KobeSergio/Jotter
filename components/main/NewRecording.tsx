@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { PageSpinner } from "@/components/Spinner";
+import { Spinner } from "@/components/Spinner";
 import Dropzone from "./Dropzone";
 import Recorder from "./RecorderField";
 import { FaMicrophone, FaCloudUploadAlt } from "react-icons/fa";
-import { ref } from "firebase/storage";
-import { audioProcessor } from "@/lib/functions/audio-processor";
 import { Session } from "next-auth";
 import FirebaseClass from "@/lib/classes/FirebaseClass";
 import { useRecording } from "@/contexts/RecordingContext";
@@ -49,8 +47,6 @@ export default function NewRecording({
         apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY as string,
         dangerouslyAllowBrowser: true,
       });
-
-      
 
       const transcription = await openai.audio.transcriptions.create({
         file: file,
@@ -159,11 +155,9 @@ export default function NewRecording({
 
   if (isLoading)
     return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <PageSpinner />
-
-        <p className="mt-4 text-sm text-darkGreen font-semibold">
-          {" "}
+      <div className="w-full h-screen flex justify-center items-center gap-1">
+        <Spinner />
+        <p className="text-base text-darkGreen font-semibold">
           {progressBar == 1
             ? "Parsing audio..."
             : progressBar == 2
@@ -227,7 +221,7 @@ export default function NewRecording({
             onClick={() => {
               uploadFiles();
             }}
-            className="w-fit h-fit px-6 py-3 flex items-center justify-center bg-[#171F27] hover:bg-[#004BAA] text-base font-medium text-white rounded-lg cursor-pointer select-none"
+            className="w-fit h-fit px-6 py-3 flex items-center justify-center bg-darkGreen hover:bg-opacity-95 text-base font-bold text-white rounded-lg cursor-pointer select-none"
           >
             Proceed
           </div>
