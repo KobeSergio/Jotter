@@ -19,9 +19,7 @@ export default function Recordings({ session }: { session: Session }) {
   const [isLoading, setIsLoading] = useState(false);
   const [showDeleteRecordingModal, setShowDeleteRecordingModal] =
     useState(false);
-  const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [toggle, setToggle] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { firebase } = useFirebase();
@@ -46,12 +44,6 @@ export default function Recordings({ session }: { session: Session }) {
     }
     setIsLoading(false);
     setShowDeleteRecordingModal(false);
-  };
-
-  const handleRenameClick = (index: number) => {
-    setEditingRecordingIndex(index);
-    setNewName(recordings[index].name);
-    setIsOpen(null);
   };
 
   const handleRename = useCallback(

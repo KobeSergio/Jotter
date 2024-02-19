@@ -14,5 +14,5 @@ export default function Content({ session }: { session: Session }) {
   if (selectedRecording == null)
     return <NewRecording session={session} firebase={firebase} />;
 
-  return <Recordings session={session} firebase={firebase} />;
+  return <Recordings session={session} />;
 }
