@@ -193,7 +193,7 @@ export default function NavDesktop({ session }: { session: Session }) {
                 recordings?.map((recording: Recording, index: number) => (
                   <div
                     key={index}
-                    className={`relative w-full flex justify-between px-6 py-5 select-none group ${
+                    className={`relative w-full flex justify-between px-6 py-5 gap-2.5 select-none group ${
                       selectedRecording == index
                         ? "bg-mainGreen/10 text-white"
                         : "text-white hover:bg-mainGreen/10 cursor-pointer"
@@ -202,7 +202,7 @@ export default function NavDesktop({ session }: { session: Session }) {
                       setSelectedRecording(index);
                     }}
                   >
-                    <div className="flex flex-col gap-1.5">
+                    <div className="w-fit flex flex-col gap-1.5">
                       {editingRecordingIndex === index ? (
                         <input
                           ref={inputRef}
