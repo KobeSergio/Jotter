@@ -157,7 +157,7 @@ export default function NewRecording({
     return (
       <div className="w-full h-screen flex justify-center items-center gap-1">
         <Spinner />
-        <p className="text-base text-darkGreen font-semibold">
+        <p className="text-base text-darkGreen font-semibold select-none">
           {progressBar == 1
             ? "Parsing audio..."
             : progressBar == 2

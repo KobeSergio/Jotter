@@ -1,41 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { signOut } from "next-auth/react";
 import { MdLogout } from "react-icons/md";
 import { PiWaveformBold } from "react-icons/pi";
 import { motion } from "framer-motion";
 import { useRecording } from "@/contexts/RecordingContext";
 import { Recording } from "@/types/Recording";
-import SignOutModal from "./SignOutModal";
+import SignOutModal from "./modals/SignOut";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function NavMobile({ session }: { session: any }) {
-  const { selectedRecording, setSelectedRecording, recordings } =
+  const { selectedRecording, setSelectedRecording, recordings, setRecordings } =
     useRecording();
-  const [isOpen, setIsOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
+  const [toggle, setToggle] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [newName, setNewName] = useState("");
+  const [editingRecordingIndex, setEditingRecordingIndex] = useState<
+    number | null
+  >(null);
 
   return (
     <>
       <SignOutModal
-        isOpen={showModal}
-        setter={() => setShowModal(false)}
+        isOpen={showSignOutModal}
+        setter={() => setShowSignOutModal(false)}
         onSubmit={() => {
           signOut();
-          setShowModal(false);
+          setShowSignOutModal(false);
         }}
       />
       <div
         className={`${
-          isOpen ? "fixed inset-0" : "w-16"
+          toggle ? "fixed inset-0" : "w-16"
         } z-10 py-8 flex flex-col lg:hidden bg-darkGreen h-full transition-all duration-500 ease-in-out`}
       >
-        {isOpen ? (
+        {toggle ? (
           <>
             <Hamburger
-              toggle={() => setIsOpen((prev) => !prev)}
-              isOpen={isOpen}
+              toggle={() => setToggle((prev) => !prev)}
+              isOpen={toggle}
             />
+            <Link href={"/"} className="flex justify-center items-center">
+              <Image
+                src="./Jotter-removebg-preview.svg"
+                width={100}
+                height={100}
+                alt={"logo"}
+              />
+              <h2 className="text-white text-xl font-bold cursor-pointer select-none -ml-4">
+                Jotter
+              </h2>
+            </Link>
             <div className="px-6 py-4 space-y-2">
               <h2 className="text-white text-lg font-bold text-center select-none">
                 All Recordings
@@ -43,7 +61,7 @@ export default function NavMobile({ session }: { session: any }) {
               <div
                 onClick={() => {
                   setSelectedRecording(null);
-                  setIsOpen(false);
+                  setToggle(false);
                 }}
                 className="w-full px-12 py-4 flex items-center justify-center bg-mainGreen hover:bg-opacity-95 text-base font-bold text-center text-darkGreen rounded-lg cursor-pointer select-none"
               >
@@ -55,20 +73,22 @@ export default function NavMobile({ session }: { session: any }) {
                 recordings?.map((recording: Recording, index: number) => (
                   <div
                     key={index}
-                    className={`flex flex-col gap-1.5 px-6 py-5 select-none ${
+                    className={`relative w-full flex justify-between px-6 py-5 select-none group ${
                       selectedRecording == index
                         ? "bg-mainGreen/10 text-white"
                         : "text-white hover:bg-mainGreen/10 cursor-pointer"
                     }`}
                     onClick={() => {
                       setSelectedRecording(index);
-                      setIsOpen(false);
+                      setToggle(false);
                     }}
                   >
-                    <p className="text-base font-medium">{recording.name}</p>
-                    <div className="flex justify-between">
-                      <p className="text-xs font-medium">{recording.date}</p>
-                      <p className="text-xs font-medium"></p>
+                    <div className="flex flex-col gap-1.5">
+                      <p className="text-base font-semibold">{recording.name}</p>
+                      <div className="flex justify-between">
+                        <p className="text-xs font-medium">{recording.date}</p>
+                        <p className="text-xs font-medium"></p>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -86,20 +106,17 @@ export default function NavMobile({ session }: { session: any }) {
             </div>
             <div
               className="w-fit flex items-center gap-2 text-red-500 hover:text-red-600 text-lg font-semibold cursor-pointer px-6 select-none"
-              onClick={() => {
-                setShowModal(true);
-                setIsOpen(false);
-              }}
+              onClick={() => setShowSignOutModal(true)}
             >
               <MdLogout size={16} />
-              Logout
+              Sign Out
             </div>
           </>
         ) : (
           <>
             <Hamburger
-              toggle={() => setIsOpen((prev) => !prev)}
-              isOpen={isOpen}
+              toggle={() => setToggle((prev) => !prev)}
+              isOpen={toggle}
             />
           </>
         )}
