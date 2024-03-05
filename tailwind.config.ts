@@ -13,7 +13,9 @@ const config: Config = {
         darkGreen: "#213D39",
         white: "#FFFFFF",
         gray: "#E5E9E7",
-        border: "#F2F2F2",
+        buttonBorder: "#E2E8F0",
+        textField: "#64748B",
+        nav: "#8E8E93"
       },
     },
   },
