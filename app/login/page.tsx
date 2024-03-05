@@ -79,7 +79,7 @@ export default function Login() {
         )}
       </PrimaryButton>
       <p className="text-nav font-normal text-base select-none">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <span
           onClick={() => router.push("/signup")}
           className="text-darkGreen cursor-pointer font-semibold hover:underline"
