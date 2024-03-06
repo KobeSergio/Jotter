@@ -30,7 +30,7 @@ export default function Login() {
   };
 
   return (
-    <form className="flex flex-col items-center justify-center w-[500px] h-fit bg-white px-6 py-8 border border-buttonBorder rounded-lg gap-[30px]">
+    <form className="flex flex-col items-center justify-center w-full md:w-[500px] h-fit bg-white px-6 py-8 border border-buttonBorder rounded-lg gap-[30px]">
       <h2 className="font-bold text-2xl text-center text-darkGreen select-none cursor-pointer">
         Log in to continue
       </h2>
